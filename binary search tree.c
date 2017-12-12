@@ -63,76 +63,20 @@ int search(listPointer n, int number)
 		else
 			return NULL;
 	}
-	else if(n->data == number)
+	else
 		return n->data;
 }
 
-void print(listPointer p)
+void print(listPointer p, int level)
 {
 	if(p->left != NULL)
-		print(p->left);
-	printf("%d\t",p->data);
+		print(p->left, level + 1);
+		int i;
+	for(i = 0; i < level; i++)
+		printf("\t");
+	printf("%d\n",p->data);
 	if(p->right != NULL)
-		print(p->right);
-}
-
-void delete(listPointer n)
-{
-	if(n->parent != NULL)
-	{
-		listPointer p = n->parent;
-		if(n->left == NULL && n->right == NULL)
-		{
-			if(n->data < p->data)
-			{
-				p->left = NULL;
-				n->parent = NULL;
-			}
-			else
-			{
-				p->right = NULL;
-				n->parent = NULL;
-			}
-		}
-		else if(n->left == NULL && n->right != NULL)
-		{
-			if(n->data < p->data)
-			{
-				n = n->right;
-				p->left = n;
-				n->parent = p;
-			}
-			else
-			{
-				n = n->left;
-				p->right = n;
-				n->parent = p;
-			}						
-		}
-		else if(n->left != NULL && n->right == NULL)
-		{
-			if(n->data < p->data)
-			{
-				n = n->left;
-				p->left = n;
-				n->parent = p;
-			}
-			else
-			{
-				n = n->left;
-				p->right = n;
-				n->parent = p;
-			}	
-		}
-		else
-		{
-			findmax();
-		}
-	}
-	else
-	{
-		
-	}
+		print(p->right, level + 1);
 }
 
 int main()
@@ -144,7 +88,7 @@ int main()
 	int data, n;
 	while(run == 1)
 	{
-		printf("1.新增資料 2.搜尋資料 3.刪除資料 4.修改資料 5.中序印出 請選擇:\n");
+		printf("1.新增資料 2.搜尋資料 3.印出 請選擇:\n");
 		scanf("%d", &f);
 		switch(f)
 		{
@@ -172,13 +116,7 @@ int main()
 						printf("找到%d\n", n);
 				break;
 			case 3:
-				
-				break;
-			case 4:
-				
-				break;
-			case 5:
-				print(root);
+				print(root, 1);
 				printf("\n\n");
 				break;
 		}
