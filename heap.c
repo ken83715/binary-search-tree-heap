@@ -1,127 +1,126 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
+#include<stdio.h>
+#include<stdlib.h>
 
-struct node //定義結構
-{
-    int data; //值 
-    int index; //索引 
-    struct node *left;
-    struct node *right;
-    struct node *parent; //parent node 
-};
+typedef struct listNode *listPointer;
+typedef struct listNode{
+	int data; //數值 
+	int index; //在tree中的索引 
+	listPointer left;
+	listPointer right;
+	listPointer parent; //parent node
+} node;
 
-struct node *createnode(void) //創造新空間
+listPointer createnode()
 {
-	struct node *newnode;
-	newnode=(struct node *) malloc(sizeof(struct node));
-	newnode->left=NULL;
-	newnode->right=NULL;
-	newnode->parent=NULL;
+	listPointer newnode;
+	newnode = (listPointer)malloc(sizeof(node));
+	newnode->left = NULL;
+	newnode->right = NULL;
+	newnode->parent = NULL;
 	return newnode;
 }
 
-struct node *insert(struct node *root, int n) //n為索引(index)
+listPointer insert(listPointer root, int n) //n為要新增的位置索引(index)
 {
-	if(n/2!=1) //還沒到最後的餘數 
+	if(n / 2 != 1) //還沒除完
 	{
-		struct node *ptr=insert(root,n/2);      //                                    1
-		if(n%2!=0)                              //                    2                                3
+		listPointer ptr = insert(root, n / 2);  //                                    1
+		if(n % 2 != 0)                          //                    2                                3
 		{                                       //            4               5                6                7
-			if(ptr->right!=NULL)                //        8       9       10      11      12      13       14       15
-				ptr=ptr->right;                 //餘數    000     100     010    110     001     101      011      111 
-		}
+			if(ptr->right != NULL)              //        8       9       10      11      12      13       14       15
+				ptr = ptr->right;               //餘數    000     100     010    110     001     101      011      111 
+		}                                       //餘數要倒著看 0往左 1往右 
 		else
 		{
-			if(ptr->left!=NULL)
-				ptr=ptr->left;
+			if(ptr->left != NULL)
+				ptr = ptr->left;
 		}
 		return ptr;
 	}
-	else //到最後的餘數了
+	else //除完了
 	{
-		if(n%2!=0)
+		if(n % 2 != 0)
 		{
-			if(root->right!=NULL)
-				root=root->right;
+			if(root->right != NULL)
+				root = root->right;
 		}
 		else
 		{
-			if(root->left!=NULL)
-				root=root->left;
+			if(root->left != NULL)
+				root = root->left;
 		}
 		return root;
 	}
 }
 
-void check(struct node *newnode) //檢查上下大小
+void check(listPointer newnode) //檢查上下大小
 {
-	if(newnode->parent!=NULL) 
+	if(newnode->parent != NULL) //往上檢查 
 	{
-		struct node *p=newnode->parent;
-		if(newnode->data>p->data)
+		listPointer p = newnode->parent;
+		if(newnode->data > p->data)
 		{
-			int temp=newnode->data;
-			newnode->data=p->data;
-			p->data=temp;
+			int temp = newnode->data;
+			newnode->data = p->data;
+			p->data = temp;
 			check(p);
 		}
 	}
-	if(newnode->left!=NULL&&newnode->right!=NULL) //左子右子都有 
+	if(newnode->left != NULL && newnode->right != NULL) //左子右子都有 
 	{
-		struct node *leftc=newnode->left;
-		struct node *rightc=newnode->right;
-		if(leftc->data>rightc->data) //左子比右子大
+		listPointer leftc = newnode->left;
+		listPointer rightc = newnode->right;
+		if(leftc->data > rightc->data) //左子比右子大
 		{
-			if(newnode->data<leftc->data)
+			if(newnode->data < leftc->data) //交換 
 			{
-				int temp=newnode->data;
-				newnode->data=leftc->data;
-				leftc->data=temp;
+				int temp = newnode->data;
+				newnode->data = leftc->data;
+				leftc->data = temp;
 				check(leftc);
 			}
 		}
 		else //左子比右子小
 		{
-			if(newnode->data<rightc->data)
+			if(newnode->data < rightc->data) //交換 
 			{
-				int temp=newnode->data;
-				newnode->data=rightc->data;
-				rightc->data=temp;
+				int temp = newnode->data;
+				newnode->data = rightc->data;
+				rightc->data = temp;
 				check(rightc);
 			}
 		}
 	}
-	else if(newnode->left!=NULL&&newnode->right==NULL) //只有左子 
+	else if(newnode->left != NULL && newnode->right == NULL) //只有左子 
 	{
-		struct node *leftc=newnode->left;
-		if(newnode->data<leftc->data)
+		listPointer leftc = newnode->left;
+		if(newnode->data < leftc->data) //交換
 		{
-			int temp=newnode->data;
-			newnode->data=leftc->data;
-			leftc->data=temp;
+			int temp = newnode->data;
+			newnode->data = leftc->data;
+			leftc->data = temp;
 			check(leftc);
 		}
 	}
 }
 
-struct node *finddata(struct node *root, int data) //搜尋數值 
+listPointer finddata(listPointer root, int data) //搜尋數值 
 {
-	if(root->data==data)
+	if(root->data == data)
 	{
 		return root;
 	}
 	else
 	{
-		if(root->left!=NULL&&root->right!=NULL)
+		if(root->left != NULL && root->right != NULL) //有左子樹有右子樹 
 		{
-			struct node *leftc=finddata(root->left, data);
-			struct node *rightc=finddata(root->right, data);
-			if(leftc!=NULL)
+			listPointer leftc = finddata(root->left, data);
+			listPointer rightc = finddata(root->right, data);
+			if(leftc != NULL)
 			{
 				return leftc;
 			}
-			else if(rightc!=NULL)
+			else if(rightc != NULL)
 			{
 				return rightc;
 			}
@@ -130,35 +129,35 @@ struct node *finddata(struct node *root, int data) //搜尋數值
 				return NULL;
 			}
 		}
-		else if(root->left!=NULL&&root->right==NULL)
+		else if(root->left != NULL && root->right == NULL) //不會有無左子樹有右子樹的情況發生 只考慮無右子樹有左子樹 
 		{
 			return finddata(root->left, data);
 			
 		}
-		else
+		else //左右子樹都沒有
 		{
 			return NULL;
 		}
 	}
 }
 
-struct node *findindex(struct node *root, int index) //搜尋索引 
+listPointer findindex(listPointer root, int index) //搜尋索引 
 {
-	if(root->index==index)
+	if(root->index == index)
 	{
 		return root;
 	}
 	else
 	{
-		if(root->left!=NULL&&root->right!=NULL)
+		if(root->left != NULL && root->right != NULL) //有左子樹有右子樹 
 		{
-			struct node *leftc=findindex(root->left, index);
-			struct node *rightc=findindex(root->right, index);
-			if(leftc!=NULL)
+			listPointer leftc = findindex(root->left, index);
+			listPointer rightc = findindex(root->right, index);
+			if(leftc != NULL)
 			{
 				return leftc;
 			}
-			else if(rightc!=NULL)
+			else if(rightc != NULL)
 			{
 				return rightc;
 			}
@@ -167,139 +166,134 @@ struct node *findindex(struct node *root, int index) //搜尋索引
 				return NULL;
 			}
 		}
-		else if(root->left!=NULL&&root->right==NULL)
+		else if(root->left != NULL && root->right == NULL) //不會有無左子樹有右子樹的情況發生 只考慮無右子樹有左子樹 
 		{
-			return findindex(root->left, index);		
+			return findindex(root->left, index);
+			
 		}
-		else
+		else //左右子樹都沒有
 		{
 			return NULL;
 		}
 	}
 }
 
-void delet(struct node *del, struct node *root, int index) //刪除 del:要刪除的點 root:整個tree的root index:目前總共節點數 
+void delet(listPointer root, listPointer lastnode) //刪除 root:整個tree的root lastnode:最後一個節點
 {
-	struct node *lastnode=findindex(root, index);
-	del->data=lastnode->data;
-	check(del);
-	if(lastnode->parent!=NULL)
+	root->data = lastnode->data;
+	check(root);
+	if(lastnode->parent != NULL)
 	{
-		struct node *p=lastnode->parent;
-		if(lastnode->index%2==0)
+		listPointer p = lastnode->parent;
+		if(lastnode->index % 2 == 0)
 		{
-			p->left=NULL;
+			p->left = NULL;
 		}
 		else
 		{
-			p->right=NULL;
+			p->right = NULL;
 		}
-		lastnode->parent=NULL;
+		free(lastnode);
 	}
-	else
+	else //只剩下root
 	{
-		root=NULL;
-		del=NULL;
+		free(root);
 	}
 }
 
-void print(struct node *root) //中序印出 
+void print(listPointer p, int level) //印出 
 {
-	if(root->left)
-		print(root->left);
-	//printf("%d\t", root->index);
-	printf("%d\t", root->data); 
-	if(root->right)
-		print(root->right);
+	if(p->right != NULL)
+		print(p->right, level + 1);
+	int i;
+	for(i = 1; i < level; i++)
+		printf("\t");
+	printf("%d\n", p->data);
+	if(p->left != NULL)
+		print(p->left, level + 1);
 }
 
 int main()
 {
-	struct node *root=NULL;
-	struct node *newnode=NULL;
-	struct node *temp=NULL;
+	listPointer root = NULL;
+	listPointer newnode = NULL;
+	listPointer temp = NULL;
 	int data;
-	int index=0;
+	int count = 0;
+	int run = 1;
 	
-	bool run = 1;
 	while(run)
 	{
-		char func;
-		printf(" 1.新增\t2.刪除\t3.離開  請選擇你的動作 :\n");
-		scanf("%s",&func);
-		while(func!=49&&func!=50&&func!=51)
-		{
-			printf("請輸入正確的選項!\n\n");
-			printf(" 1.新增\t2.刪除\t3.離開  請選擇你的動作 :\n");
-			scanf("%s",&func);
-		}
+		int func;
+		printf("1.insert 2.search 3.delete 4.print 5.leave:\n");
+		scanf("%d", &func);
 		
 		switch(func)
 		{
-			case '1':
-				index++;
-				printf("\n你選擇新增\n");
-				printf("請輸入數字：\n");
-				scanf("%d",&data);
-				if(root==NULL) //空tree
+			case 1:
+				count++;
+				printf("enter the number:\n");
+				scanf("%d", &data);
+				if(root == NULL) //空tree
 				{
-					root=createnode();
-					root->data=data;
-					root->index=index;
+					root = createnode();
+					root->data = data;
+					root->index = count;
 				}
 				else //有root
 				{
-					newnode=createnode();
-					newnode->data=data;
-					newnode->index=index;
+					newnode = createnode();
+					newnode->data = data;
+					newnode->index = count;
 //========================================================
-					temp=insert(root, newnode->index); //回傳要新增位置的parent 
+					temp = insert(root, newnode->index); //回傳要新增位置的parent 
 //========================================================
-					if(index%2==0) //偶數放左 
-						temp->left=newnode;
-					else           //奇數放右
-						temp->right=newnode;
-					newnode->parent=temp;
+					if(count % 2 == 0) //偶數放左 
+						temp->left = newnode;
+					else               //奇數放右
+						temp->right = newnode;
+					newnode->parent = temp;
 //========================================================
 					check(newnode); //檢查大小 
 //========================================================
 				}
-				printf("新增完成\n");
-				print(root);
-				printf("\n\n");
 				break;
-			case '2':
-				printf("\n你選擇刪除\n");
-				if(root==NULL) //空的
-					printf("沒有資料!\n\n");
-				else //不是空的
+			case 2:
+				if(root == NULL) //空的
 				{
-					printf("請輸入要刪除的數字:\n");
-					scanf("%d",&data);
-					temp=finddata(root, data); //找出要刪除的點 
-					if(temp!=NULL)
-					{
-						delet(temp, root, index); //刪除
-						index--;
-						if(index==0)
-						{
-							root=NULL;
-						}
-						printf("刪除完成!\n");
-						if(root!=NULL)
-						{
-							print(root);
-							printf("\n\n");	
-						}
-					}
-					else
-					{
-						printf("找不到資料!\n\n");
-					}
+					printf("Empty\n");
+					break;
 				}
+				printf("enter the number:\n");
+				scanf("%d", &data);
+				temp = finddata(root, data);
+				if(temp != NULL)
+					printf("found %d\n", temp->data);
+				else
+					printf("Not found\n");
 				break;
-			case '3':
-				printf("\n你選擇離開");
+			case 3:
+				if(root == NULL) //空的
+				{
+					printf("Empty\n");
+					break;
+				}
+				printf("delete root: %d\n", root->data);
+				temp = findindex(root, count); //找最後一個節點 
+				delet(root, temp); //刪除
+				count--;
+				if(count == 0)
+					root = NULL; 
+				break;
+			case 4:
+				if(root == NULL) //空的
+				{
+					printf("Empty\n");
+					break;
+				}
+				print(root, 1);
+				break;
+			case 5:
 				run = 0;
 				break;
 		}
