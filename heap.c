@@ -3,8 +3,8 @@
 
 typedef struct listNode *listPointer;
 typedef struct listNode{
-	int data; //æ•¸å€¼ 
-	int index; //åœ¨treeä¸­çš„ç´¢å¼• 
+	int data; //¼Æ­È 
+	int index; //¦btree¤¤ªº¯Á¤Þ 
 	listPointer left;
 	listPointer right;
 	listPointer parent; //parent node
@@ -20,16 +20,16 @@ listPointer createnode()
 	return newnode;
 }
 
-listPointer insert(listPointer root, int n) //nç‚ºè¦æ–°å¢žçš„ä½ç½®ç´¢å¼•(index)
+listPointer insert(listPointer root, int n) //n¬°­n·s¼Wªº¦ì¸m¯Á¤Þ(index)
 {
-	if(n / 2 != 1) //é‚„æ²’é™¤å®Œ
+	if(n / 2 != 1) //ÁÙ¨S°£§¹
 	{
 		listPointer ptr = insert(root, n / 2);  //                                    1
 		if(n % 2 != 0)                          //                    2                                3
 		{                                       //            4               5                6                7
 			if(ptr->right != NULL)          //        8       9       10      11      12      13       14       15
-				ptr = ptr->right;       //é¤˜æ•¸    000     100      010    110     001      101      011      111 
-		}                                       //é¤˜æ•¸è¦å€’è‘—çœ‹ 0å¾€å·¦ 1å¾€å³ 
+				ptr = ptr->right;       //¾l¼Æ    000     100      010    110     001      101      011      111 
+		}                                       //¾l¼Æ­n­ËµÛ¬Ý 0©¹¥ª 1©¹¥k 
 		else
 		{
 			if(ptr->left != NULL)
@@ -37,7 +37,7 @@ listPointer insert(listPointer root, int n) //nç‚ºè¦æ–°å¢žçš„ä½ç½®ç´¢å¼•(index
 		}
 		return ptr;
 	}
-	else //é™¤å®Œäº†
+	else //°£§¹¤F
 	{
 		if(n % 2 != 0)
 		{
@@ -53,9 +53,9 @@ listPointer insert(listPointer root, int n) //nç‚ºè¦æ–°å¢žçš„ä½ç½®ç´¢å¼•(index
 	}
 }
 
-void check(listPointer newnode) //æª¢æŸ¥ä¸Šä¸‹å¤§å°
+void check(listPointer newnode) //ÀË¬d¤W¤U¤j¤p
 {
-	if(newnode->parent != NULL) //å¾€ä¸Šæª¢æŸ¥ 
+	if(newnode->parent != NULL) //©¹¤WÀË¬d 
 	{
 		listPointer p = newnode->parent;
 		if(newnode->data > p->data)
@@ -66,13 +66,13 @@ void check(listPointer newnode) //æª¢æŸ¥ä¸Šä¸‹å¤§å°
 			check(p);
 		}
 	}
-	if(newnode->left != NULL && newnode->right != NULL) //å·¦å­å³å­éƒ½æœ‰ 
+	if(newnode->left != NULL && newnode->right != NULL) //¥ª¤l¥k¤l³£¦³ 
 	{
 		listPointer leftc = newnode->left;
 		listPointer rightc = newnode->right;
-		if(leftc->data > rightc->data) //å·¦å­æ¯”å³å­å¤§
+		if(leftc->data > rightc->data) //¥ª¤l¤ñ¥k¤l¤j
 		{
-			if(newnode->data < leftc->data) //äº¤æ› 
+			if(newnode->data < leftc->data) //¥æ´« 
 			{
 				int temp = newnode->data;
 				newnode->data = leftc->data;
@@ -80,9 +80,9 @@ void check(listPointer newnode) //æª¢æŸ¥ä¸Šä¸‹å¤§å°
 				check(leftc);
 			}
 		}
-		else //å·¦å­æ¯”å³å­å°
+		else //¥ª¤l¤ñ¥k¤l¤p
 		{
-			if(newnode->data < rightc->data) //äº¤æ› 
+			if(newnode->data < rightc->data) //¥æ´« 
 			{
 				int temp = newnode->data;
 				newnode->data = rightc->data;
@@ -91,10 +91,10 @@ void check(listPointer newnode) //æª¢æŸ¥ä¸Šä¸‹å¤§å°
 			}
 		}
 	}
-	else if(newnode->left != NULL && newnode->right == NULL) //åªæœ‰å·¦å­ 
+	else if(newnode->left != NULL && newnode->right == NULL) //¥u¦³¥ª¤l 
 	{
 		listPointer leftc = newnode->left;
-		if(newnode->data < leftc->data) //äº¤æ›
+		if(newnode->data < leftc->data) //¥æ´«
 		{
 			int temp = newnode->data;
 			newnode->data = leftc->data;
@@ -104,7 +104,7 @@ void check(listPointer newnode) //æª¢æŸ¥ä¸Šä¸‹å¤§å°
 	}
 }
 
-listPointer finddata(listPointer root, int data) //æœå°‹æ•¸å€¼ 
+listPointer finddata(listPointer root, int data) //·j´M¼Æ­È 
 {
 	if(root->data == data)
 	{
@@ -112,7 +112,7 @@ listPointer finddata(listPointer root, int data) //æœå°‹æ•¸å€¼
 	}
 	else
 	{
-		if(root->left != NULL && root->right != NULL) //æœ‰å·¦å­æ¨¹æœ‰å³å­æ¨¹ 
+		if(root->left != NULL && root->right != NULL) //¦³¥ª¤l¾ð¦³¥k¤l¾ð 
 		{
 			listPointer leftc = finddata(root->left, data);
 			listPointer rightc = finddata(root->right, data);
@@ -129,19 +129,19 @@ listPointer finddata(listPointer root, int data) //æœå°‹æ•¸å€¼
 				return NULL;
 			}
 		}
-		else if(root->left != NULL && root->right == NULL) //ä¸æœƒæœ‰ç„¡å·¦å­æ¨¹æœ‰å³å­æ¨¹çš„æƒ…æ³ç™¼ç”Ÿ åªè€ƒæ…®ç„¡å³å­æ¨¹æœ‰å·¦å­æ¨¹ 
+		else if(root->left != NULL && root->right == NULL) //¤£·|¦³µL¥ª¤l¾ð¦³¥k¤l¾ðªº±¡ªpµo¥Í ¥u¦Ò¼{µL¥k¤l¾ð¦³¥ª¤l¾ð 
 		{
 			return finddata(root->left, data);
 			
 		}
-		else //å·¦å³å­æ¨¹éƒ½æ²’æœ‰
+		else //¥ª¥k¤l¾ð³£¨S¦³
 		{
 			return NULL;
 		}
 	}
 }
 
-listPointer findindex(listPointer root, int index) //æœå°‹ç´¢å¼• 
+listPointer findindex(listPointer root, int index) //·j´M¯Á¤Þ 
 {
 	if(root->index == index)
 	{
@@ -149,7 +149,7 @@ listPointer findindex(listPointer root, int index) //æœå°‹ç´¢å¼•
 	}
 	else
 	{
-		if(root->left != NULL && root->right != NULL) //æœ‰å·¦å­æ¨¹æœ‰å³å­æ¨¹ 
+		if(root->left != NULL && root->right != NULL) //¦³¥ª¤l¾ð¦³¥k¤l¾ð 
 		{
 			listPointer leftc = findindex(root->left, index);
 			listPointer rightc = findindex(root->right, index);
@@ -166,19 +166,19 @@ listPointer findindex(listPointer root, int index) //æœå°‹ç´¢å¼•
 				return NULL;
 			}
 		}
-		else if(root->left != NULL && root->right == NULL) //ä¸æœƒæœ‰ç„¡å·¦å­æ¨¹æœ‰å³å­æ¨¹çš„æƒ…æ³ç™¼ç”Ÿ åªè€ƒæ…®ç„¡å³å­æ¨¹æœ‰å·¦å­æ¨¹ 
+		else if(root->left != NULL && root->right == NULL) //¤£·|¦³µL¥ª¤l¾ð¦³¥k¤l¾ðªº±¡ªpµo¥Í ¥u¦Ò¼{µL¥k¤l¾ð¦³¥ª¤l¾ð 
 		{
 			return findindex(root->left, index);
 			
 		}
-		else //å·¦å³å­æ¨¹éƒ½æ²’æœ‰
+		else //¥ª¥k¤l¾ð³£¨S¦³
 		{
 			return NULL;
 		}
 	}
 }
 
-void delet(listPointer root, listPointer lastnode) //åˆªé™¤ root:æ•´å€‹treeçš„root lastnode:æœ€å¾Œä¸€å€‹ç¯€é»ž
+void delet(listPointer root, listPointer lastnode) //§R°£ root:¾ã­Ótreeªºroot lastnode:³Ì«á¤@­Ó¸`ÂI
 {
 	root->data = lastnode->data;
 	check(root);
@@ -195,13 +195,13 @@ void delet(listPointer root, listPointer lastnode) //åˆªé™¤ root:æ•´å€‹treeçš„ro
 		}
 		free(lastnode);
 	}
-	else //åªå‰©ä¸‹root
+	else //¥u³Ñ¤Uroot
 	{
 		free(root);
 	}
 }
 
-void print(listPointer p, int level) //å°å‡º 
+void print(listPointer p, int level) //¦L¥X 
 {
 	if(p->right != NULL)
 		print(p->right, level + 1);
@@ -234,32 +234,32 @@ int main()
 				count++;
 				printf("enter the number:\n");
 				scanf("%d", &data);
-				if(root == NULL) //ç©ºtree
+				if(root == NULL) //ªÅtree
 				{
 					root = createnode();
 					root->data = data;
 					root->index = count;
 				}
-				else //æœ‰root
+				else //¦³root
 				{
 					newnode = createnode();
 					newnode->data = data;
 					newnode->index = count;
 //========================================================
-					temp = insert(root, newnode->index); //å›žå‚³è¦æ–°å¢žä½ç½®çš„parent 
+					temp = insert(root, newnode->index); //¦^¶Ç­n·s¼W¦ì¸mªºparent 
 //========================================================
-					if(count % 2 == 0) //å¶æ•¸æ”¾å·¦ 
+					if(count % 2 == 0) //°¸¼Æ©ñ¥ª 
 						temp->left = newnode;
-					else               //å¥‡æ•¸æ”¾å³
+					else               //©_¼Æ©ñ¥k
 						temp->right = newnode;
 					newnode->parent = temp;
 //========================================================
-					check(newnode); //æª¢æŸ¥å¤§å° 
+					check(newnode); //ÀË¬d¤j¤p 
 //========================================================
 				}
 				break;
 			case 2:
-				if(root == NULL) //ç©ºçš„
+				if(root == NULL) //ªÅªº
 				{
 					printf("Empty\n");
 					break;
@@ -273,20 +273,20 @@ int main()
 					printf("Not found\n");
 				break;
 			case 3:
-				if(root == NULL) //ç©ºçš„
+				if(root == NULL) //ªÅªº
 				{
 					printf("Empty\n");
 					break;
 				}
 				printf("delete root: %d\n", root->data);
-				temp = findindex(root, count); //æ‰¾æœ€å¾Œä¸€å€‹ç¯€é»ž 
-				delet(root, temp); //åˆªé™¤
+				temp = findindex(root, count); //§ä³Ì«á¤@­Ó¸`ÂI 
+				delet(root, temp); //§R°£
 				count--;
 				if(count == 0)
 					root = NULL; 
 				break;
 			case 4:
-				if(root == NULL) //ç©ºçš„
+				if(root == NULL) //ªÅªº
 				{
 					printf("Empty\n");
 					break;
