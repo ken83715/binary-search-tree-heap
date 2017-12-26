@@ -27,8 +27,8 @@ listPointer insert(listPointer root, int n) //n璶穝糤竚ま(index)
 		listPointer ptr = insert(root, n / 2);  //                                    1
 		if(n % 2 != 0)                          //                    2                                3
 		{                                       //            4               5                6                7
-			if(ptr->right != NULL)          //        8       9       10      11      12      13       14       15
-				ptr = ptr->right;       //緇计    000     100      010    110     001      101      011      111 
+			if(ptr->right != NULL)              //        8       9       10      11      12      13       14       15
+				ptr = ptr->right;               //緇计    000     100      010    110     001     101      011      111 
 		}                                       //緇计璶帝 0┕オ 1┕ 
 		else
 		{
@@ -53,51 +53,51 @@ listPointer insert(listPointer root, int n) //n璶穝糤竚ま(index)
 	}
 }
 
-void check(listPointer newnode) //浪琩
+void check(listPointer root) //浪琩
 {
-	if(newnode->parent != NULL) //┕浪琩 
+	if(root->parent != NULL) //┕浪琩 
 	{
-		listPointer p = newnode->parent;
-		if(newnode->data > p->data)
+		listPointer p = root->parent;
+		if(root->data > p->data)
 		{
-			int temp = newnode->data;
-			newnode->data = p->data;
+			int temp = root->data;
+			root->data = p->data;
 			p->data = temp;
 			check(p);
 		}
 	}
-	if(newnode->left != NULL && newnode->right != NULL) //オ常Τ 
+	if(root->left != NULL && root->right != NULL) //オ常Τ 
 	{
-		listPointer leftc = newnode->left;
-		listPointer rightc = newnode->right;
+		listPointer leftc = root->left;
+		listPointer rightc = root->right;
 		if(leftc->data > rightc->data) //オゑ
 		{
-			if(newnode->data < leftc->data) //ユ传 
+			if(root->data < leftc->data) //ユ传 
 			{
-				int temp = newnode->data;
-				newnode->data = leftc->data;
+				int temp = root->data;
+				root->data = leftc->data;
 				leftc->data = temp;
 				check(leftc);
 			}
 		}
 		else //オゑ
 		{
-			if(newnode->data < rightc->data) //ユ传 
+			if(root->data < rightc->data) //ユ传 
 			{
-				int temp = newnode->data;
-				newnode->data = rightc->data;
+				int temp = root->data;
+				root->data = rightc->data;
 				rightc->data = temp;
 				check(rightc);
 			}
 		}
 	}
-	else if(newnode->left != NULL && newnode->right == NULL) //Τオ 
+	else if(root->left != NULL && root->right == NULL) //Τオ 
 	{
-		listPointer leftc = newnode->left;
-		if(newnode->data < leftc->data) //ユ传
+		listPointer leftc = root->left;
+		if(root->data < leftc->data) //ユ传
 		{
-			int temp = newnode->data;
-			newnode->data = leftc->data;
+			int temp = root->data;
+			root->data = leftc->data;
 			leftc->data = temp;
 			check(leftc);
 		}
